@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\Documents\GitHub\hal11\HEW\IO\conioex_impl.cpp" />
+    <ClCompile Include="conioex_impl.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
@@ -137,9 +137,11 @@
     <ClCompile Include="Scene_title.cpp" />
     <ClCompile Include="ScreenBuffer.cpp" />
     <ClCompile Include="Setting.cpp" />
+    <ClCompile Include="UI.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conioex.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="hew_console.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Scene.h" />
@@ -147,6 +149,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="ScreenBuffer.h" />
     <ClInclude Include="Setting.h" />
+    <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="hew_console_x64_md.lib" />

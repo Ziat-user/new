@@ -9,7 +9,7 @@
 #include "ScreenBuffer.h"
 
 int main() {
-    if (!ziat::コンソール初期化(0)) return 0;
+    if (!ziat::コンソール初期化(1)) return 0;
 
     using clock = std::chrono::steady_clock;
     using us = std::chrono::microseconds;
@@ -35,7 +35,6 @@ int main() {
                 isRunning = false;
                 break;
             }
-            ScreenBuffer_クリア(ctx.screen);
             const SceneName next = update(ctx);
 
             ScreenBuffer_出力(ctx.screen);

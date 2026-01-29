@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 struct ScreenBuffer {
     // 使うサイズ（0..max）
@@ -14,7 +15,7 @@ struct ScreenBuffer {
     static constexpr int MAX_HEIGHT = 25;
     static constexpr int MAX_CELLS = MAX_WIDTH * MAX_HEIGHT;
 
-    char cells[MAX_CELLS]{};
+    std::vector<char> cells;
 };
 
 // 生成
