@@ -12,11 +12,10 @@ SceneName Title_Update(Context& ctx) {
     ScreenBuffer_•¶š—ñOR(ctx.screen, 0, 3, "2: Setting");
     ScreenBuffer_•¶š—ñOR(ctx.screen, 0, 4, "ESC: Exit");
 
-    if (kbhit()) {
-        const int ch = getch();
-        if (ch == '1') return SceneName::Game;
-        if (ch == '2') return SceneName::Setting;
-        if (ch == 27)  return SceneName::Exit; // ESC
-    }
+    // conioex: ‰Ÿ‰ºó‘Ô‚ğƒ|[ƒŠƒ“ƒO
+    if (inport(PK_1)) return SceneName::Game;
+    if (inport(PK_2)) return SceneName::Setting;
+    if (inport(PK_ESC)) return SceneName::Exit;
+
     return SceneName::None;
 }
