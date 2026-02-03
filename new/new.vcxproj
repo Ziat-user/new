@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClCompile Include="conioex_impl.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />
@@ -142,6 +143,7 @@
   <ItemGroup>
     <ClInclude Include="conioex.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="game.h" />
     <ClInclude Include="hew_console.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Scene.h" />

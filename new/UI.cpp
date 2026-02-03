@@ -62,7 +62,7 @@ void UI_DrawButton(ScreenBuffer& sb, const UIButton& b, const UIInput& in) {
         DrawFrame(sb, b, '+', '+', '+', '+', '=', '|');
     }
     else if (over) {
-        DrawFrame(sb, b, '/', '\\', '\\', '/', '-', '|');
+        DrawFrame(sb, b, '*', '*', '*', '*', '-', '|');
     }
     else {
         DrawFrame(sb, b, '+', '+', '+', '+', '-', '|');

@@ -1,7 +1,6 @@
 #define CONIOEX
 #include "conioex.h"
 
-#define NOMINMAX
 #include "Scene.h"
 #include "ScreenBuffer.h"
 #include "Input.h"
@@ -11,7 +10,7 @@
 #include <algorithm>
 #include <string>
 
-namespace {
+namespace { 
 
     struct MouseState {
         int x = 0;
