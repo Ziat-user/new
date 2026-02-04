@@ -10,15 +10,15 @@ namespace {
         return (px >= b.x) && (py >= b.y) && (px < b.x + b.w) && (py < b.y + b.h);
     }
 
-    void DrawHLine(ScreenBuffer& sb, int x, int y, int w, char ch) {
+    void DrawHLine(ScreenBuffer& sb, int x, int y, int w, wchar_t ch) {
         for (int i = 0; i < w; ++i) ScreenBuffer_単文字(sb, x + i, y, ch);
     }
 
-    void DrawVLine(ScreenBuffer& sb, int x, int y, int h, char ch) {
+    void DrawVLine(ScreenBuffer& sb, int x, int y, int h, wchar_t ch) {
         for (int i = 0; i < h; ++i) ScreenBuffer_単文字(sb, x, y + i, ch);
     }
 
-    void DrawFrame(ScreenBuffer& sb, const UIButton& b, char tl, char tr, char bl, char br, char h, char v) {
+    void DrawFrame(ScreenBuffer& sb, const UIButton& b, wchar_t tl, wchar_t tr, wchar_t bl, wchar_t br, wchar_t h, wchar_t v) {
         if (b.w < 2 || b.h < 2) return;
 
         ScreenBuffer_単文字(sb, b.x, b.y, tl);
@@ -36,20 +36,20 @@ namespace {
         }
     }
 
-    void DrawLabelCentered(ScreenBuffer& sb, const UIButton& b, const std::string& text) {
+    void DrawLabelCentered(ScreenBuffer& sb, const UIButton& b, const std::wstring& text) {
         if (b.w <= 2 || b.h <= 2) return;
 
         const int innerW = b.w - 2;
         const int innerH = b.h - 2;
 
+        // NOTE: 全角/半角の「表示幅」までは考慮せず、wchar_tの文字数で中央寄せ
         const int tx = b.x + 1 + std::max(0, (innerW - static_cast<int>(text.size())) / 2);
         const int ty = b.y + 1 + innerH / 2;
 
-        // 収まる範囲だけ描画
         const int maxLen = std::max(0, std::min(innerW, static_cast<int>(text.size())));
         if (maxLen <= 0) return;
 
-        ScreenBuffer_文字列(sb, tx, ty, text.substr(0, static_cast<size_t>(maxLen)).c_str());
+        ScreenBuffer_文字列W(sb, tx, ty, text.substr(0, static_cast<size_t>(maxLen)).c_str());
     }
 } // namespace
 
@@ -57,26 +57,23 @@ void UI_DrawButton(ScreenBuffer& sb, const UIButton& b, const UIInput& in) {
     const bool over = HitTest(b, in.mouseX, in.mouseY);
     const bool pressed = over && in.mouseHeldL;
 
-    // 見た目（ASCII枠）
     if (pressed) {
-        DrawFrame(sb, b, '+', '+', '+', '+', '=', '|');
+        DrawFrame(sb, b, L'+', L'+', L'+', L'+', L'=', L'|');
     }
     else if (over) {
-        DrawFrame(sb, b, '*', '*', '*', '*', '-', '|');
+        DrawFrame(sb, b, L'*', L'*', L'*', L'*', L'-', L'|');
     }
     else {
-        DrawFrame(sb, b, '+', '+', '+', '+', '-', '|');
+        DrawFrame(sb, b, L'+', L'+', L'+', L'+', L'-', L'|');
     }
 
     DrawLabelCentered(sb, b, b.label);
 
-    // hover時はカーソル位置も分かりやすく
     if (over && b.w > 0 && b.h > 0) {
-        ScreenBuffer_単文字(sb, std::clamp(in.mouseX, 0, sb.width - 1), std::clamp(in.mouseY, 0, sb.height - 1), '*');
+        ScreenBuffer_単文字(sb, std::clamp(in.mouseX, 0, sb.width - 1), std::clamp(in.mouseY, 0, sb.height - 1), L'*');
     }
 }
 
 bool UI_ButtonClicked(const UIButton& b, const UIInput& in) {
-    // 「ボタン上で左ボタンが押されたフレーム」をクリックとする（down判定）
     return HitTest(b, in.mouseX, in.mouseY) && in.mouseDownL;
 }

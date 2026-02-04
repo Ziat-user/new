@@ -103,8 +103,8 @@ SceneName Game_Update(Context& ctx) {
 
     ÉQÅ[ÉÄUIï`âÊ(ctx.screen, mouse);
 
-    const UIButton btnTitle{ 0, 12, 16, 3, "Title" };
-    const UIButton btnExit{ 0, 16, 16, 3, "Exit" };
+    const UIButton btnTitle{ 0, 12, 16, 3, L"¿≤ƒŸ" };
+    const UIButton btnExit{ 0, 16, 16, 3, L"º≠≥ÿÆ≥" };
 
     UI_DrawButton(ctx.screen, btnTitle, ui);
     UI_DrawButton(ctx.screen, btnExit, ui);

@@ -17,7 +17,7 @@ struct UIButton {
     int y = 0;
     int w = 0;
     int h = 0;
-    std::string label;
+    std::wstring label;
 };
 
 // ボタン描画（hover/pressedで見た目を変える）

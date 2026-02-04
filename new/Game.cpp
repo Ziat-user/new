@@ -4,10 +4,19 @@
 #include <random>
 
 namespace gamescene{
+	struct NPCステート {
+		bool 真偽;
+		std::string 名前;
+		std::vector<int> 性格;
+	};
 	void 初期化() {
-		inline static std::vector<std::string>CPU(5);
-		std::random_device rd;                          // ハードウェア乱数を使って初期化
-		std::mt19937 gen(rd());                         // メルセンヌ・ツイスタによる乱数生成器
-		std::uniform_int_distribution<> dist(0, sizeof(CPU) / sizeof(CPU[0]) - 1);
+		static std::vector<bool> CPU(5); 
+
+		std::random_device rd;
+		std::mt19937 gen(rd());
+		std::uniform_int_distribution<> dist(0, 1);
+		for (size_t st = 0; st < CPU.size(); ++st) {
+			CPU[st] = dist(gen);
+		}
 	}
 }
