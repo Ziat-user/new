@@ -19,7 +19,6 @@ int main() {
     bool isRunning = true;
 
     Context ctx{};
-    ctx.screen = ScreenBuffer_生成(80, 25, ' ');
 
     SceneName current = SceneName::Title;
     SceneFn update = ToSceneFn(current);
@@ -35,9 +34,12 @@ int main() {
                 isRunning = false;
                 break;
             }
+
             const SceneName next = update(ctx);
 
-            ScreenBuffer_出力(ctx.screen);
+            // 各 Scene は ScreenBuffer_Clear/Print で buffer を作る想定。
+            // ここでまとめて出力する。
+            ScreenBuffer_Show();
 
             if (next != SceneName::None) {
                 if (next == SceneName::Exit) {

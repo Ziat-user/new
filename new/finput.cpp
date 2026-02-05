@@ -38,11 +38,10 @@ namespace file {
 		return lines;
 	}
 
-	void ファイル変換(std::string &ファイル) {
+	void ファイル_文字列(const std::string& 文字列) {
 		//コメント
-		if (ファイル[0] == '#') {
-
-		}
+		
+		
 	}
 
 } // namespace file

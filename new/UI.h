@@ -21,7 +21,7 @@ struct UIButton {
 };
 
 // ボタン描画（hover/pressedで見た目を変える）
-void UI_DrawButton(ScreenBuffer& sb, const UIButton& b, const UIInput& in);
+void UI_DrawButton(const UIButton& b, const UIInput& in);
 
 // ボタンが「クリックされた」フレームなら true
 bool UI_ButtonClicked(const UIButton& b, const UIInput& in);

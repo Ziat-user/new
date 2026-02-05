@@ -26,5 +26,5 @@ void showFPS(ScreenBuffer& sb, int x, int y) {
 
     char buf[64]{};
     std::snprintf(buf, sizeof(buf), "FPS: %.1f", current_fps);
-    ScreenBuffer_•¶Žš—ñ(sb, x, y, buf);
+    ScreenBuffer_Print(x, y, buf);
 }

@@ -8,7 +8,7 @@
 
 #include <windows.h>
 
-namespace {
+namespace ziat{
 
 	static void コンソール入力モード設定_マウス有効化() {
 		HANDLE hin = GetStdHandle(STD_INPUT_HANDLE);

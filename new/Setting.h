@@ -9,6 +9,6 @@ enum class ConWindow {
 	SUB_A = 1,
 };
 
-namespace ziat {
+namespace ziat{
 	bool ƒRƒ“ƒ\[ƒ‹‰Šú‰»(bool on = 1);
 }
