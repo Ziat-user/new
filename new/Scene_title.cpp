@@ -53,7 +53,7 @@ SceneName Title_Update(Context& ctx) {
     (void)ctx;
 
     ScreenBuffer_Clear();
-    ScreenBuffer_Print(1, 1, "=== TITLE ===");
+    ScreenBuffer_Print(1, 1, L"=== タイトル ===");
 
     // 仮置きボタン（座標は 0-based）
     const UIButton btnGame{ 2, 4, 18, 3, L"ゲーム" };
@@ -68,7 +68,7 @@ SceneName Title_Update(Context& ctx) {
     UI_DrawButton(btnExit, ui);
 
     // キー操作も残す（仮）
-    ScreenBuffer_Print(1, 18, "1: Game   2: Setting   ESC: Exit");
+    ScreenBuffer_Print(1, 18, L"1: ゲーム   2: 設定   ESC: 終了");
 
     if (UI_ButtonClicked(btnGame, ui)) return SceneName::Game;
     if (UI_ButtonClicked(btnSetting, ui)) return SceneName::Setting;

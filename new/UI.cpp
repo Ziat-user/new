@@ -3,6 +3,8 @@
 
 #include <algorithm>
 #include <string>
+#define NOMINMAX
+#include <windows.h>
 
 namespace {
 
@@ -15,111 +17,99 @@ namespace {
         return (px0 >= b.x) && (py0 >= b.y) && (px0 < b.x + b.w) && (py0 < b.y + b.h);
     }
 
-    // 固定バッファへ 1文字を書く（範囲外は捨てる）
-    void PutChar0(int x0, int y0, char ch) noexcept {
-        if (x0 < 0 || y0 < 0 || x0 >= WIDTH || y0 >= HEIGHT) return;
-        buffer[y0][x0] = ch;
+    int DisplayWidth_WChar(wchar_t wc) noexcept {
+        // 超簡易: ASCII は 1、それ以外は 2（日本語想定）
+        if (wc >= 0x20 && wc <= 0x7E) return 1;
+        if (wc == L'　') return 2; // 全角スペース
+        return 2;
     }
 
-    void DrawHLine0(int x0, int y0, int w, char ch) noexcept {
+    int DisplayWidth_WString(const std::wstring& ws) noexcept {
+        int w = 0;
+        for (wchar_t wc : ws) w += DisplayWidth_WChar(wc);
+        return w;
+    }
+
+    std::wstring FitToCells(const std::wstring& ws, int maxCells) {
+        if (maxCells <= 0) return L"";
+
+        std::wstring out;
+        out.reserve(ws.size());
+
+        int used = 0;
+        for (wchar_t wc : ws) {
+            const int cell = DisplayWidth_WChar(wc);
+            if (used + cell > maxCells) break;
+            out.push_back(wc);
+            used += cell;
+        }
+        return out;
+    }
+
+    void DrawButtonLine0(int x0, int y0, int w, char left, char fill, char right, const std::wstring& label) {
         if (w <= 0) return;
-        const int x1 = std::clamp(x0, 0, WIDTH);
-        const int x2 = std::clamp(x0 + w, 0, WIDTH);
         if (y0 < 0 || y0 >= HEIGHT) return;
 
-        for (int x = x1; x < x2; ++x) PutChar0(x, y0, ch);
-    }
+        const int innerW = std::max(0, w - 2);
 
-    void DrawVLine0(int x0, int y0, int h, char ch) noexcept {
-        if (h <= 0) return;
-        const int y1 = std::clamp(y0, 0, HEIGHT);
-        const int y2 = std::clamp(y0 + h, 0, HEIGHT);
-        if (x0 < 0 || x0 >= WIDTH) return;
+        std::wstring lineW;
+        lineW.reserve(static_cast<std::size_t>(w));
 
-        for (int y = y1; y < y2; ++y) PutChar0(x0, y, ch);
-    }
+        lineW.push_back(static_cast<wchar_t>(left));
 
-    void DrawFrame0(const UIButton& b, char tl, char tr, char bl, char br, char h, char v) noexcept {
-        if (b.w < 2 || b.h < 2) return;
-
-        // 四隅
-        PutChar0(b.x, b.y, tl);
-        PutChar0(b.x + b.w - 1, b.y, tr);
-        PutChar0(b.x, b.y + b.h - 1, bl);
-        PutChar0(b.x + b.w - 1, b.y + b.h - 1, br);
-
-        // 辺
-        if (b.w > 2) {
-            DrawHLine0(b.x + 1, b.y, b.w - 2, h);
-            DrawHLine0(b.x + 1, b.y + b.h - 1, b.w - 2, h);
+        if (label.empty()) {
+            // 上/下など：横線で埋める
+            lineW.append(static_cast<std::size_t>(innerW), static_cast<wchar_t>(fill));
         }
-        if (b.h > 2) {
-            DrawVLine0(b.x, b.y + 1, b.h - 2, v);
-            DrawVLine0(b.x + b.w - 1, b.y + 1, b.h - 2, v);
-        }
-    }
+        else {
+            // 中身：ラベルをセンタリング（空白で埋める）
+            const std::wstring fit = FitToCells(label, innerW);
+            const int labelCells = DisplayWidth_WString(fit);
 
-    std::string NarrowAsciiLossy(const std::wstring& ws) {
-        // 現 ScreenBuffer が char バッファなので、まずは ASCII のみ表示
-        // それ以外は '?' へ（将来的にワイド対応するならここを差し替え）
-        std::string s;
-        s.reserve(ws.size());
-        for (wchar_t wc : ws) {
-            if (wc >= 0x20 && wc <= 0x7E) s.push_back(static_cast<char>(wc));
-            else if (wc == L'　') s.push_back(' ');
-            else s.push_back('?');
-        }
-        return s;
-    }
+            const int padL = std::max(0, (innerW - labelCells) / 2);
+            const int padR = std::max(0, innerW - padL - labelCells);
 
-    void DrawLabelCentered0(const UIButton& b, const std::wstring& text) {
-        if (b.w <= 2 || b.h <= 2) return;
-
-        const int innerW = b.w - 2;
-        const int innerH = b.h - 2;
-
-        std::string label = NarrowAsciiLossy(text);
-        if (label.empty()) return;
-
-        // innerW に収まるように切り詰め
-        if (static_cast<int>(label.size()) > innerW) {
-            label.resize(static_cast<std::size_t>(innerW));
+            lineW.append(static_cast<std::size_t>(padL), L' ');
+            lineW += fit;
+            lineW.append(static_cast<std::size_t>(padR), L' ');
         }
 
-        const int tx0 = b.x + 1 + std::max(0, (innerW - static_cast<int>(label.size())) / 2);
-        const int ty0 = b.y + 1 + innerH / 2;
+        lineW.push_back(static_cast<wchar_t>(right));
 
-        // ScreenBuffer_Print は範囲外をある程度吸収するが、tyだけは事前に落とす
-        if (ty0 < 0 || ty0 >= HEIGHT) return;
-
-        ScreenBuffer_Print(ToSBX(tx0), ToSBY(ty0), label);
+        ScreenBuffer_Print(ToSBX(x0), ToSBY(y0), lineW);
     }
 
 } // namespace
 
-void UI_DrawButton(const UIButton& b, const UIInput& in) {; 
+void UI_DrawButton(const UIButton& b, const UIInput& in) {
     const bool over = HitTest(b, in.mouseX, in.mouseY);
     const bool pressed = over && in.mouseHeldL;
 
-    // 見た目（仮）
-    if (pressed) {
-        DrawFrame0(b, '+', '+', '+', '+', '=', '|');
-    }
-    else if (over) {
-        DrawFrame0(b, '*', '*', '*', '*', '-', '|');
-    }
-    else {
-        DrawFrame0(b, '+', '+', '+', '+', '-', '|');
+    if (b.w < 2 || b.h < 2) return;
+
+    // 枠の文字
+    char tl = '+', tr = '+', bl = '+', br = '+', h = '-', v = '|';
+    if (pressed) { h = '='; }
+    else if (over) { tl = tr = bl = br = '*'; }
+
+    // 上
+    DrawButtonLine0(b.x, b.y, b.w, tl, h, tr, L"");
+
+    // 中（ラベルは中央行にだけ表示）
+    const int innerH = b.h - 2;
+    const int labelRow = b.y + 1 + innerH / 2;
+
+    for (int y = b.y + 1; y <= b.y + b.h - 2; ++y) {
+        if (y == labelRow) {
+            DrawButtonLine0(b.x, y, b.w, v, ' ', v, b.label);
+        }
+        else {
+            DrawButtonLine0(b.x, y, b.w, v, ' ', v, L"");
+        }
     }
 
-    DrawLabelCentered0(b, b.label);
-
-    // ホバー中はカーソル位置に印
-    if (over && b.w > 0 && b.h > 0) {
-        const int mx0 = std::clamp(in.mouseX, 0, WIDTH - 1);
-        const int my0 = std::clamp(in.mouseY, 0, HEIGHT - 1);
-        PutChar0(mx0, my0, '*');
-    }
+    // 下
+    DrawButtonLine0(b.x, b.y + b.h - 1, b.w, bl, h, br, L"");
 }
 
 bool UI_ButtonClicked(const UIButton& b, const UIInput& in) {

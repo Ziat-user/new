@@ -3,20 +3,20 @@
 
 #include "ScreenBuffer.h"
 
-#include <iostream>
 #include <cstring>
+#include <windows.h>
 
 // 実体定義（これが唯一の buffer）
-char buffer[HEIGHT][WIDTH + 1];
+wchar_t buffer[HEIGHT][WIDTH + 1];
 
 void ScreenBuffer_Clear() {
     for (int y = 0; y < HEIGHT; ++y) {
-        std::memset(buffer[y], ' ', WIDTH);
-        buffer[y][WIDTH] = '\0';
+        std::wmemset(buffer[y], L' ', WIDTH);
+        buffer[y][WIDTH] = L'\0';
     }
 }
 
-void ScreenBuffer_Print(int x, int y, const std::string& text) {
+void ScreenBuffer_Print(int x, int y, const std::wstring& text) {
     int px = x - 1;
     int py = y - 1;
 
@@ -31,14 +31,17 @@ void ScreenBuffer_Print(int x, int y, const std::string& text) {
 }
 
 void ScreenBuffer_Show() {
-    gotoxy(1, 1);
+    HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
+    if (hOut == nullptr || hOut == INVALID_HANDLE_VALUE) return;
 
-    std::string output;
-    output.reserve(WIDTH * HEIGHT + HEIGHT);
-
+    // スクロールを起こさない：改行を出さず、各行を左端に上書き
     for (int y = 0; y < HEIGHT; ++y) {
-        output += buffer[y];
-        if (y < HEIGHT - 1) output += "\n";
+        gotoxy(1, y + 1);
+
+        DWORD written = 0;
+        WriteConsoleW(hOut, buffer[y], WIDTH, &written, nullptr);
     }
-    std::cout << output;
+
+    // カーソルを固定（好み）
+    gotoxy(1, 1);
 }

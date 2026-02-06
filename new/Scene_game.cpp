@@ -43,21 +43,21 @@ namespace {
     }
 
     void ÉQÅ[ÉÄUIï`âÊ(const MouseState& ms) {
-        ScreenBuffer_Print(1, 1, "Mouse: x=" + std::to_string(ms.x) + " y=" + std::to_string(ms.y));
+        ScreenBuffer_Print(1, 1, L"Mouse: x=" + std::to_wstring(ms.x) + L" y=" + std::to_wstring(ms.y));
 
         ScreenBuffer_Print(1, 2,
-            std::string("MouseBtn down : L=") + (ms.downL ? "1" : "0") +
-            " M=" + (ms.downM ? "1" : "0") +
-            " R=" + (ms.downR ? "1" : "0"));
+            std::wstring(L"MouseBtn down : L=") + (ms.downL ? L"1" : L"0") +
+            L" M=" + (ms.downM ? L"1" : L"0") +
+            L" R=" + (ms.downR ? L"1" : L"0"));
 
         ScreenBuffer_Print(1, 3,
-            std::string("MouseBtn held : L=") + (ms.heldL ? "1" : "0") +
-            " M=" + (ms.heldM ? "1" : "0") +
-            " R=" + (ms.heldR ? "1" : "0"));
+            std::wstring(L"MouseBtn held : L=") + (ms.heldL ? L"1" : L"0") +
+            L" M=" + (ms.heldM ? L"1" : L"0") +
+            L" R=" + (ms.heldR ? L"1" : L"0"));
 
-        ScreenBuffer_Print(1, 6, "=== GAME ===");
-        ScreenBuffer_Print(1, 8, "t: Title");
-        ScreenBuffer_Print(1, 9, "ESC: Exit");
+        ScreenBuffer_Print(1, 6, L"=== GAME ===");
+        ScreenBuffer_Print(1, 8, L"t: Title");
+        ScreenBuffer_Print(1, 9, L"ESC: èIóπ");
     }
 
 } // namespace

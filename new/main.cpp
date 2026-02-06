@@ -9,8 +9,10 @@
 #include "ScreenBuffer.h"
 
 int main() {
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
     if (!ziat::ƒRƒ“ƒ\[ƒ‹‰Šú‰»(1)) return 0;
-
+    
     using clock = std::chrono::steady_clock;
     using us = std::chrono::microseconds;
     const auto FRAME_DT = us(1000000 / 60); // 60fps

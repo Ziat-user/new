@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <string>
 
-// 毎フレーム呼ぶ想定。sb には「書くだけ」（出力は main 側で一括実行）
+// 毎フレーム呼ぶ想定。sb には「描画内容」を溜めて（出力は main で一括で行う）
 void showFPS(ScreenBuffer& sb, int x, int y) {
     using clock = std::chrono::steady_clock;
 
@@ -24,7 +24,7 @@ void showFPS(ScreenBuffer& sb, int x, int y) {
         last_check_time = now;
     }
 
-    char buf[64]{};
-    std::snprintf(buf, sizeof(buf), "FPS: %.1f", current_fps);
-    ScreenBuffer_Print(x, y, buf);
+    wchar_t buf[64]{};
+    std::swprintf(buf, sizeof(buf) / sizeof(buf[0]), L"FPS: %.1f", current_fps);
+    ScreenBuffer_Print(x, y, std::wstring(buf));
 }
