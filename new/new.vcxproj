@@ -130,7 +130,7 @@
     <ClCompile Include="conioex_impl.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="finput.cpp" />
-    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Scene.cpp" />

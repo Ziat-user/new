@@ -4,6 +4,7 @@
 #include "Scene.h"
 #include "ScreenBuffer.h"
 #include "Input.h"
+#include "game.h"
 
 #include <string>
 
@@ -58,6 +59,21 @@ namespace {
         ScreenBuffer_Print(1, 6, L"=== GAME ===");
         ScreenBuffer_Print(1, 8, L"t: Title");
         ScreenBuffer_Print(1, 9, L"ESC: èIóπ");
+
+        // CPU ÇÃê^ãUï\é¶
+        ScreenBuffer_Print(1, 11, L"=== CPU ê^ãU ===");
+        int row = 12;
+
+        if (gamecore::CPU.empty()) {
+            ScreenBuffer_Print(1, row, L"(CPUÇ»Çµ)");
+            return;
+        }
+
+        for (std::size_t i = 0; i < gamecore::CPU.size() && row <= HEIGHT; ++i, ++row) {
+            const bool v = gamecore::CPU[i].ê^ãU;
+            ScreenBuffer_Print(1, row,
+                L"CPU[" + std::to_wstring(i) + L"] ê^ãU=" + (v ? L"true" : L"false"));
+        }
     }
 
 } // namespace

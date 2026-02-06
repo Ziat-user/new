@@ -1,22 +1,20 @@
 #include <iostream>
-#include <vector>
 #include <string>
 #include <random>
+#include "game.h"
 
-namespace gamescene{
-	struct NPCステート {
-		bool 真偽;
-		std::string 名前;
-		std::vector<int> 性格;
-	};
+namespace gamecore{
+	
 	void 初期化() {
-		static std::vector<bool> CPU(5); 
+		if (CPU.empty()) return;
 
 		std::random_device rd;
 		std::mt19937 gen(rd());
-		std::uniform_int_distribution<> dist(0, 1);
-		for (size_t st = 0; st < CPU.size(); ++st) {
-			CPU[st] = dist(gen);
-		}
+		std::uniform_int_distribution<int> dist(0, static_cast<int>(CPU.size()) - 1);
+
+		for (auto& npc : CPU) npc.真偽 = false;
+		//左側に受け取る変数右側に与える配列系
+		int idx = dist(gen);
+		CPU[idx].真偽 = true;
 	}
 }
