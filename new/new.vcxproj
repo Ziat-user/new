@@ -137,9 +137,11 @@
     <ClCompile Include="Scene_game.cpp" />
     <ClCompile Include="Scene_setting.cpp" />
     <ClCompile Include="Scene_title.cpp" />
+    <ClCompile Include="Scene_tutorial.cpp" />
     <ClCompile Include="ScreenBuffer.cpp" />
     <ClCompile Include="Setting.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="conioex.h" />
@@ -152,6 +154,7 @@
     <ClInclude Include="main.h" />
     <ClInclude Include="ScreenBuffer.h" />
     <ClInclude Include="Setting.h" />
+    <ClInclude Include="tutorial.h" />
     <ClInclude Include="UI.h" />
   </ItemGroup>
   <ItemGroup>

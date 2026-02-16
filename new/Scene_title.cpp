@@ -57,25 +57,29 @@ SceneName Title_Update(Context& ctx) {
 
     // 仮置きボタン（座標は 0-based）
     const UIButton btnGame{ 2, 4, 18, 3, L"ゲーム" };
-    const UIButton btnSetting{ 2, 8, 18, 3, L"SETTING" };
-    const UIButton btnExit{ 2, 12, 18, 3, L"EXIT" };
+    const UIButton btnTutorial{ 2, 8, 18, 3, L"チュートリアル" };
+    const UIButton btnSetting{ 2, 12, 18, 3, L"SETTING" };
+    const UIButton btnExit{ 2, 16, 18, 3, L"EXIT" };
 
     const MouseState ms = マウス状態取得_簡易();
     const UIInput ui = UI入力に変換_固定SB(ms);
 
     UI_DrawButton(btnGame, ui);
+    UI_DrawButton(btnTutorial, ui);
     UI_DrawButton(btnSetting, ui);
     UI_DrawButton(btnExit, ui);
 
     // キー操作も残す（仮）
-    ScreenBuffer_Print(1, 18, L"1: ゲーム   2: 設定   ESC: 終了");
+    ScreenBuffer_Print(1, 20, L"1: ゲーム   2: チュートリアル   3: 設定   ESC: 終了");
 
-    if (UI_ButtonClicked(btnGame, ui)) return SceneName::Game;
-    if (UI_ButtonClicked(btnSetting, ui)) return SceneName::Setting;
-    if (UI_ButtonClicked(btnExit, ui)) return SceneName::Exit;
+    if (UI_ButtonClicked(btnGame, ui))     return SceneName::Game;
+    if (UI_ButtonClicked(btnTutorial, ui)) return SceneName::Tutorial;
+    if (UI_ButtonClicked(btnSetting, ui))  return SceneName::Setting;
+    if (UI_ButtonClicked(btnExit, ui))     return SceneName::Exit;
 
     if (キーボード入力(PK_1)) return SceneName::Game;
-    if (キーボード入力(PK_2)) return SceneName::Setting;
+    if (キーボード入力(PK_2)) return SceneName::Tutorial;
+    if (キーボード入力(PK_3)) return SceneName::Setting;
     if (キーボード入力(PK_ESC)) return SceneName::Exit;
 
     return SceneName::None;
