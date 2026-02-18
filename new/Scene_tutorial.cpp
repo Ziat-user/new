@@ -32,7 +32,7 @@ namespace {
 
         ms.downL = (down & 0b001) != 0;
         ms.heldL = (held & 0b001) != 0;
-
+        int test;
         return ms;
     }
 
